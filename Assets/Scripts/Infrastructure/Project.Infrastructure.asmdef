@@ -1,0 +1,24 @@
+{
+    "name": "Project.Infrastructure",
+    "rootNamespace": "Project.Infrastructure",
+    "references": [
+        "GUID:60d24026939295745a2a89e3b302646f",
+        "GUID:de3bf74daa3629e4aaa57c306a862a14",
+        "GUID:4124e28731d903241958dda23cb4f7e0",
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:593a5b492d29ac6448b1ebf7f035ef33",
+        "GUID:4a82e496084bb4f3fb60aebcaa2f5361",
+        "GUID:0da6d172d18a54e4389d0dce1e1ffdf2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
