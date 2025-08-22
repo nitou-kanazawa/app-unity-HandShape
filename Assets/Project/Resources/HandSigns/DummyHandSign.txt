@@ -1,0 +1,3 @@
+# Dummy Hand Sign Placeholder
+# In actual implementation, replace this with real hand sign sprite images
+# Expected files: Rock.png, Paper.png, Scissors.png, etc.
