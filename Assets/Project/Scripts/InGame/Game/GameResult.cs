@@ -1,18 +1,16 @@
+using Nitou.TinyProcess;
+
 namespace Project.InGame.Game
 {
-    public struct GameResult
+    public sealed class GameResult : CompleteResult
     {
-        public int finalScore;
-        public int correctCount;
-        public int incorrectCount;
-        public float playTime;
+        public int Score { get; }
+        public int CorrectCount { get; }
+        public int IncorrectCount { get; }
 
-        public GameResult(int finalScore, int correctCount, int incorrectCount, float playTime)
+        public GameResult(int score) : base()
         {
-            this.finalScore = finalScore;
-            this.correctCount = correctCount;
-            this.incorrectCount = incorrectCount;
-            this.playTime = playTime;
+            Score = score;
         }
     }
 }

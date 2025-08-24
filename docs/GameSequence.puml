@@ -1,0 +1,147 @@
+@startuml
+participant "Caller" as C
+participant "HandMatchingGameManager" as GM
+participant "UI Controller" as UI
+participant "Timer" as T
+participant "Presentation Interfaces" as PI
+participant "GameEvents (UniRx)" as GE
+
+C -> GM: StartGameAsync(InGameConfig)
+activate GM
+
+GM -> UI: Initialize Game UI
+GM -> T: Start Game Timer (40s)
+activate T
+GM -> GE: OnGameStarted.OnNext()
+
+loop Until Time Limit or Game End
+    GM -> GM: Generate Question (YourHand)
+    GM -> UI: Display YourHand + 3 MyHand Options
+    GM -> T: Start Question Timer (5s)
+
+    alt Player Answers Within 5s
+        UI -> GM: OnPlayerAnswer(selectedHand)
+        GM -> T: Stop Question Timer
+
+        alt Correct Answer
+            GM -> GM: Calculate Score
+            GM -> GE: OnAnswerSubmitted.OnNext(true)
+            GM -> GE: OnScoreChanged.OnNext(newScore)
+            GM -> PI: PlayCorrectAnimationAsync(score)
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+            GM -> PI: PlayScoreUpdateAsync(newScore)
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+        else Incorrect Answer
+            GM -> GE: OnAnswerSubmitted.OnNext(false)
+            GM -> PI: PlayIncorrectAnimationAsync()
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+        end
+
+        GM -> PI: PlayQuestionTransitionAsync()
+        activate PI
+        PI --> GM: Transition Complete
+        deactivate PI
+
+    else 5s Timeout
+        GM -> T: Question Timer Expired
+        GM -> GE: OnAnswerSubmitted.OnNext(false)
+        GM -> PI: PlayIncorrectAnimationAsync()
+        activate PI
+        PI --> GM: Animation Complete
+        deactivate PI
+        GM -> PI: PlayQuestionTransitionAsync()
+        activate PI
+        PI --> GM: Transition Complete
+        deactivate PI
+    end
+
+    GM -> GE: OnTimeUpdated.OnNext(remainingTime)
+end
+
+T -> GM: Game Timer Expired
+deactivate T
+GM -> GM: Calculate Final GameResult
+GM -> GE: OnGameEnded.OnNext(GameResult)
+GM --> C: Return GameResult
+deactivate GM
+
+@enduml@startuml
+participant "Caller" as C
+participant "HandMatchingGameManager" as GM
+participant "UI Controller" as UI
+participant "Timer" as T
+participant "Presentation Interfaces" as PI
+participant "GameEvents (UniRx)" as GE
+
+C -> GM: StartGameAsync(InGameConfig)
+activate GM
+
+GM -> UI: Initialize Game UI
+GM -> T: Start Game Timer (40s)
+activate T
+GM -> GE: OnGameStarted.OnNext()
+
+loop Until Time Limit or Game End
+    GM -> GM: Generate Question (YourHand)
+    GM -> UI: Display YourHand + 3 MyHand Options
+    GM -> T: Start Question Timer (5s)
+
+    alt Player Answers Within 5s
+        UI -> GM: OnPlayerAnswer(selectedHand)
+        GM -> T: Stop Question Timer
+
+        alt Correct Answer
+            GM -> GM: Calculate Score
+            GM -> GE: OnAnswerSubmitted.OnNext(true)
+            GM -> GE: OnScoreChanged.OnNext(newScore)
+            GM -> PI: PlayCorrectAnimationAsync(score)
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+            GM -> PI: PlayScoreUpdateAsync(newScore)
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+        else Incorrect Answer
+            GM -> GE: OnAnswerSubmitted.OnNext(false)
+            GM -> PI: PlayIncorrectAnimationAsync()
+            activate PI
+            PI --> GM: Animation Complete
+            deactivate PI
+        end
+
+        GM -> PI: PlayQuestionTransitionAsync()
+        activate PI
+        PI --> GM: Transition Complete
+        deactivate PI
+
+    else 5s Timeout
+        GM -> T: Question Timer Expired
+        GM -> GE: OnAnswerSubmitted.OnNext(false)
+        GM -> PI: PlayIncorrectAnimationAsync()
+        activate PI
+        PI --> GM: Animation Complete
+        deactivate PI
+        GM -> PI: PlayQuestionTransitionAsync()
+        activate PI
+        PI --> GM: Transition Complete
+        deactivate PI
+    end
+
+    GM -> GE: OnTimeUpdated.OnNext(remainingTime)
+end
+
+T -> GM: Game Timer Expired
+deactivate T
+GM -> GM: Calculate Final GameResult
+GM -> GE: OnGameEnded.OnNext(GameResult)
+GM --> C: Return GameResult
+deactivate GM
+
+@enduml

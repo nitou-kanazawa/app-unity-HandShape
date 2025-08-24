@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4e437f59134e64db1a17a6c00455ce, type: 3}
+  m_Name: Pair_Heart
+  m_EditorClassIdentifier: Project.InGame::Project.InGame.Data.HandPairDataSO
+  _masterHandSign: {fileID: 11400000, guid: e634f82cbc45a314893312c2aabf9cfd, type: 2}
+  _playerHandSign: {fileID: 11400000, guid: e634f82cbc45a314893312c2aabf9cfd, type: 2}
+  _baseScore: 30
