@@ -1,10 +1,12 @@
+#if UNITY_EDITOR
 using UnityEngine;
+using UnityEditor;
 
 namespace Project.InGame.Data
 {
-    public static class SampleDataCreator
+    internal static class SampleDataCreator
     {
-        [UnityEditor.MenuItem("Project/InGame/Create Sample Data")]
+        [MenuItem("Project/InGame/Create Sample Data")]
         public static void CreateSampleData()
         {
             CreateHandSignDataSamples();
@@ -16,9 +18,9 @@ namespace Project.InGame.Data
         private static void CreateHandSignDataSamples()
         {
             var folder = "Assets/Project/Resources/SampleData";
-            if (!UnityEditor.AssetDatabase.IsValidFolder(folder))
+            if (!AssetDatabase.IsValidFolder(folder))
             {
-                UnityEditor.AssetDatabase.CreateFolder("Assets/Project/Resources", "SampleData");
+                AssetDatabase.CreateFolder("Assets/Project/Resources", "SampleData");
             }
 
             // YourHand signs
@@ -32,51 +34,51 @@ namespace Project.InGame.Data
             var scissorsMy = CreateHandSignData("Scissors_My", 103);
 
             // Save HandSignData assets
-            UnityEditor.AssetDatabase.CreateAsset(rockYour, $"{folder}/RockYour.asset");
-            UnityEditor.AssetDatabase.CreateAsset(paperYour, $"{folder}/PaperYour.asset");
-            UnityEditor.AssetDatabase.CreateAsset(scissorsYour, $"{folder}/ScissorsYour.asset");
-            UnityEditor.AssetDatabase.CreateAsset(rockMy, $"{folder}/RockMy.asset");
-            UnityEditor.AssetDatabase.CreateAsset(paperMy, $"{folder}/PaperMy.asset");
-            UnityEditor.AssetDatabase.CreateAsset(scissorsMy, $"{folder}/ScissorsMy.asset");
+            AssetDatabase.CreateAsset(rockYour, $"{folder}/RockYour.asset");
+            AssetDatabase.CreateAsset(paperYour, $"{folder}/PaperYour.asset");
+            AssetDatabase.CreateAsset(scissorsYour, $"{folder}/ScissorsYour.asset");
+            AssetDatabase.CreateAsset(rockMy, $"{folder}/RockMy.asset");
+            AssetDatabase.CreateAsset(paperMy, $"{folder}/PaperMy.asset");
+            AssetDatabase.CreateAsset(scissorsMy, $"{folder}/ScissorsMy.asset");
 
             // Create HandPairData
             var rockPair = CreateHandPairData(rockYour, rockMy, 10);
             var paperPair = CreateHandPairData(paperYour, paperMy, 15);
             var scissorsPair = CreateHandPairData(scissorsYour, scissorsMy, 20);
 
-            UnityEditor.AssetDatabase.CreateAsset(rockPair, $"{folder}/RockPair.asset");
-            UnityEditor.AssetDatabase.CreateAsset(paperPair, $"{folder}/PaperPair.asset");
-            UnityEditor.AssetDatabase.CreateAsset(scissorsPair, $"{folder}/ScissorsPair.asset");
+            AssetDatabase.CreateAsset(rockPair, $"{folder}/RockPair.asset");
+            AssetDatabase.CreateAsset(paperPair, $"{folder}/PaperPair.asset");
+            AssetDatabase.CreateAsset(scissorsPair, $"{folder}/ScissorsPair.asset");
 
-            UnityEditor.AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssets();
         }
 
         private static void CreateSampleInGameConfig()
         {
-            var config = ScriptableObject.CreateInstance<InGameConfig>();
+            var config = ScriptableObject.CreateInstance<InGameConfigSO>();
             
             var folder = "Assets/Project/Resources/SampleData";
-            var rockPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairData>($"{folder}/RockPair.asset");
-            var paperPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairData>($"{folder}/PaperPair.asset");
-            var scissorsPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairData>($"{folder}/ScissorsPair.asset");
+            var rockPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairDataSO>($"{folder}/RockPair.asset");
+            var paperPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairDataSO>($"{folder}/PaperPair.asset");
+            var scissorsPair = UnityEditor.AssetDatabase.LoadAssetAtPath<HandPairDataSO>($"{folder}/ScissorsPair.asset");
 
             // Use reflection to set private fields
-            var configType = typeof(InGameConfig);
+            var configType = typeof(InGameConfigSO);
             configType.GetField("gameTimeLimit", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 ?.SetValue(config, 40f);
             configType.GetField("questionTimeLimit", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 ?.SetValue(config, 5f);
             configType.GetField("handPairs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.SetValue(config, new HandPairData[] { rockPair, paperPair, scissorsPair });
+                ?.SetValue(config, new HandPairDataSO[] { rockPair, paperPair, scissorsPair });
 
             UnityEditor.AssetDatabase.CreateAsset(config, $"{folder}/SampleInGameConfig.asset");
             UnityEditor.AssetDatabase.SaveAssets();
         }
 
-        private static HandSignData CreateHandSignData(string name, int id)
+        private static HandSignDataSO CreateHandSignData(string name, int id)
         {
-            var data = ScriptableObject.CreateInstance<HandSignData>();
-            var dataType = typeof(HandSignData);
+            var data = ScriptableObject.CreateInstance<HandSignDataSO>();
+            var dataType = typeof(HandSignDataSO);
             
             dataType.GetField("signName", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 ?.SetValue(data, name);
@@ -88,10 +90,10 @@ namespace Project.InGame.Data
             return data;
         }
 
-        private static HandPairData CreateHandPairData(HandSignData yourHand, HandSignData myHand, int score)
+        private static HandPairDataSO CreateHandPairData(HandSignDataSO yourHand, HandSignDataSO myHand, int score)
         {
-            var data = ScriptableObject.CreateInstance<HandPairData>();
-            var dataType = typeof(HandPairData);
+            var data = ScriptableObject.CreateInstance<HandPairDataSO>();
+            var dataType = typeof(HandPairDataSO);
             
             dataType.GetField("yourHandSign", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 ?.SetValue(data, yourHand);
@@ -104,3 +106,4 @@ namespace Project.InGame.Data
         }
     }
 }
+#endif
